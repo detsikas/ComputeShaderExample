@@ -11,11 +11,15 @@ import android.graphics.Matrix;
 import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Size;
 import android.view.View;
 import android.widget.ImageView;
 
+import net.peeknpoke.apps.computeshaderexample.opengl.CustomContext;
 import net.peeknpoke.apps.computeshaderexample.permissions.StoragePermissionHandler;
 
 import java.io.IOException;
@@ -26,7 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int PICK_FROM_GALLERY = 2;
     private ImageView mSelectedImage = null;
+    private Bitmap mGalleryBitmap = null;
     final StoragePermissionHandler mStoragePermissionHandler = new StoragePermissionHandler();
+    private Handler mRenderingHandler;
+    private HandlerThread mRenderingThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +41,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mSelectedImage = findViewById(R.id.imageView);
+        mRenderingThread = new HandlerThread("RenderingCaptureing");
+        mRenderingThread.start();
+        mRenderingHandler = new Handler(mRenderingThread.getLooper());
     }
 
     public void onApplyShader(View view)
     {
-
+        if (mGalleryBitmap!=null)
+        {
+            mRenderingHandler.post(() -> {
+                final CustomContext customContext = new CustomContext(getApplicationContext(), new Size(mGalleryBitmap.getWidth(), mGalleryBitmap.getHeight()));
+                customContext.loadTexture(mGalleryBitmap);
+                customContext.onDrawFrame();
+                Bitmap filteredBitmap = customContext.getPixels();
+                runOnUiThread(() -> mSelectedImage.setImageBitmap(filteredBitmap));
+                customContext.release();
+            });
+        }
     }
 
     public void onImagePick(View view)
@@ -71,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 Bitmap rotatedBitmap = rotateBitmap(bitmap, orientation);
+                mGalleryBitmap = rotatedBitmap;
                 //Bitmap scaledBitmap = Bitmap.createScaledBitmap(rotatedBitmap, rotatedBitmap.getWidth(), rotatedBitmap.getHeight(),
                 //      true);
                 mSelectedImage.setImageBitmap(rotatedBitmap);
