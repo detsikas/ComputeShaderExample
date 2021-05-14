@@ -3,4 +3,9 @@
     <string name="apply_shader">Apply shader</string>
     <string name="pick_image">Pick Image</string>
     <string name="selected_image">Selected image</string>
+    <string name="permission_external_storage_rationale">Access to external storage is needed for storing and viewing the created images and videos</string>
+    <string name="permission_storage_never_ask_again_rationale">Access to external storage is needed for storing and viewing the created images and videos.\nPlease visit the application settings, to grant the storage permission.</string>
+    <string name="ok">OK</string>
+    <string name="Goto_app_settings">Go to app settings</string>
+    <string name="Ask_again">Ask me again please!</string>
 </resources>
