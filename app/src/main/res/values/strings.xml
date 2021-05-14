@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Compute Shader Example</string>
+    <string name="apply_shader">Apply shader</string>
+    <string name="pick_image">Pick Image</string>
+    <string name="selected_image">Selected image</string>
 </resources>
