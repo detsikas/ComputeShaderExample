@@ -1,7 +1,7 @@
 package net.peeknpoke.apps.computeshaderexample.opengl;
 
 import android.content.Context;
-import android.opengl.GLES30;
+import android.opengl.GLES31;
 import android.opengl.Matrix;
 
 import java.io.IOException;
@@ -101,83 +101,83 @@ public class Renderer {
 
     void cleanup()
     {
-        GLES30.glDeleteProgram(mProgram);
+        GLES31.glDeleteProgram(mProgram);
     }
 
     void onDrawFrame(int texture, int viewPortWidth, int viewPortHeight)
     {
-        GLES30.glViewport(0, 0, viewPortWidth, viewPortHeight);
+        GLES31.glViewport(0, 0, viewPortWidth, viewPortHeight);
         // No need to test or write depth, the screen quad has arbitrary depth, and is expected
         // to be drawn first.
-        //GLES30.glDisable(GLES30.GL_DEPTH_TEST);
-        //GLES30.glDepthMask(false);
+        //GLES31.glDisable(GLES31.GL_DEPTH_TEST);
+        //GLES31.glDepthMask(false);
 
-        GLES30.glUseProgram(mProgram);
+        GLES31.glUseProgram(mProgram);
 
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
-        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, texture);
+        GLES31.glActiveTexture(GLES31.GL_TEXTURE0);
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, texture);
 
         // Copy the texture transformation matrix over.
-        GLES30.glUniformMatrix4fv(muTexMatrixLoc, 1, false, IDENTITY_MATRIX, 0);
+        GLES31.glUniformMatrix4fv(muTexMatrixLoc, 1, false, IDENTITY_MATRIX, 0);
         ShaderUtil.checkGLError(TAG, "glUniformMatrix4fv");
 
         // Set the vertex positions.
-        GLES30.glVertexAttribPointer(
+        GLES31.glVertexAttribPointer(
                 quadPositionParam,
                 COORDS_PER_VERTEX,
-                GLES30.GL_FLOAT,
+                GLES31.GL_FLOAT,
                 false,
                 COORDS_PER_VERTEX*ShaderUtil.SIZEOF_FLOAT,
                 mVertexBuffer);
 
         // Set the texture coordinates.
-        GLES30.glVertexAttribPointer(
+        GLES31.glVertexAttribPointer(
                 quadTexCoordParam,
                 COORDS_PER_VERTEX,
-                GLES30.GL_FLOAT,
+                GLES31.GL_FLOAT,
                 false,
                 COORDS_PER_VERTEX*ShaderUtil.SIZEOF_FLOAT,
                 mTextureVertexBuffer);
 
         // Enable vertex arrays
-        GLES30.glEnableVertexAttribArray(quadPositionParam);
-        GLES30.glEnableVertexAttribArray(quadTexCoordParam);
+        GLES31.glEnableVertexAttribArray(quadPositionParam);
+        GLES31.glEnableVertexAttribArray(quadTexCoordParam);
 
-        GLES30.glDrawArrays(GLES30.GL_TRIANGLE_STRIP, 0, 4);
+        GLES31.glDrawArrays(GLES31.GL_TRIANGLE_STRIP, 0, 4);
 
         // Disable vertex arrays
-        GLES30.glDisableVertexAttribArray(quadPositionParam);
-        GLES30.glDisableVertexAttribArray(quadTexCoordParam);
+        GLES31.glDisableVertexAttribArray(quadPositionParam);
+        GLES31.glDisableVertexAttribArray(quadTexCoordParam);
 
-        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0);
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0);
 
         // Restore the depth state for further drawing.
-        //GLES30.glDepthMask(true);
-        //GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+        //GLES31.glDepthMask(true);
+        //GLES31.glEnable(GLES31.GL_DEPTH_TEST);
 
         ShaderUtil.checkGLError(TAG, "Draw");
-        GLES30.glUseProgram(0);
+        GLES31.glUseProgram(0);
     }
 
     private void createProgram()
     {
         int vertexShader =
-                ShaderUtil.loadGLShader(TAG, mVertexShader, GLES30.GL_VERTEX_SHADER);
+                ShaderUtil.loadGLShader(TAG, mVertexShader, GLES31.GL_VERTEX_SHADER);
         int fragmentShader =
-                ShaderUtil.loadGLShader(TAG, mFragmentShader, GLES30.GL_FRAGMENT_SHADER);
+                ShaderUtil.loadGLShader(TAG, mFragmentShader, GLES31.GL_FRAGMENT_SHADER);
 
-        mProgram = GLES30.glCreateProgram();
-        GLES30.glAttachShader(mProgram, vertexShader);
-        GLES30.glAttachShader(mProgram, fragmentShader);
-        GLES30.glLinkProgram(mProgram);
-        GLES30.glUseProgram(mProgram);
+        mProgram = GLES31.glCreateProgram();
+        GLES31.glAttachShader(mProgram, vertexShader);
+        GLES31.glAttachShader(mProgram, fragmentShader);
+        GLES31.glLinkProgram(mProgram);
+        GLES31.glUseProgram(mProgram);
 
         ShaderUtil.checkGLError(TAG, "Program creation");
 
-        quadPositionParam = GLES30.glGetAttribLocation(mProgram, "a_Position");
-        quadTexCoordParam = GLES30.glGetAttribLocation(mProgram, "a_TexCoord");
+        quadPositionParam = GLES31.glGetAttribLocation(mProgram, "a_Position");
+        quadTexCoordParam = GLES31.glGetAttribLocation(mProgram, "a_TexCoord");
 
-        muTexMatrixLoc = GLES30.glGetUniformLocation(mProgram, "uTexMatrix");
+        muTexMatrixLoc = GLES31.glGetUniformLocation(mProgram, "uTexMatrix");
 
         ShaderUtil.checkGLError(TAG, "Program parameters");
     }

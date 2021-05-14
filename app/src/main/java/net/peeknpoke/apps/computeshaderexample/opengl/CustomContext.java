@@ -9,7 +9,7 @@ import android.opengl.EGLConfig;
 import android.opengl.EGLContext;
 import android.opengl.EGLDisplay;
 import android.opengl.EGLSurface;
-import android.opengl.GLES30;
+import android.opengl.GLES31;
 
 import android.util.Size;
 
@@ -75,7 +75,7 @@ public class CustomContext {
         EGL14.eglMakeCurrent(mDpy, mSurf, mSurf, mCtx);
 
         mTextureHandler = new TextureHandler();
-        GLES30.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        GLES31.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         int screenshotSize = imageSize.getWidth()*imageSize.getHeight();
         mBB = ByteBuffer.allocateDirect(screenshotSize * 4);
@@ -86,7 +86,7 @@ public class CustomContext {
 
     public void onDrawFrame()
     {
-        GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
+        GLES31.glClear(GLES31.GL_COLOR_BUFFER_BIT | GLES31.GL_DEPTH_BUFFER_BIT);
         if (mRenderer !=null)
         {
             mRenderer.onDrawFrame(mTextureHandler.getTexture(), mBitmap.getWidth(),
@@ -96,7 +96,7 @@ public class CustomContext {
 
     public Bitmap getPixels()
     {
-        GLES30.glReadPixels(0, 0, mBitmap.getWidth(), mBitmap.getHeight(), GLES30.GL_RGBA, GLES30.GL_UNSIGNED_BYTE, mBB);
+        GLES31.glReadPixels(0, 0, mBitmap.getWidth(), mBitmap.getHeight(), GLES31.GL_RGBA, GLES31.GL_UNSIGNED_BYTE, mBB);
         mBitmap.copyPixelsFromBuffer(mBB);
         mBB.rewind();
 
@@ -139,7 +139,7 @@ public class CustomContext {
 
     public void copyPixelsIntoBitmap(Bitmap bitmap)
     {
-        GLES30.glReadPixels(0, 0, bitmap.getWidth(), bitmap.getHeight(), GLES30.GL_RGBA, GLES30.GL_UNSIGNED_BYTE, mBB);
+        GLES31.glReadPixels(0, 0, bitmap.getWidth(), bitmap.getHeight(), GLES31.GL_RGBA, GLES31.GL_UNSIGNED_BYTE, mBB);
 
         bitmap.copyPixelsFromBuffer(mBB);
         mBB.rewind();

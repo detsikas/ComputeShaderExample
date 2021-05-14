@@ -15,7 +15,7 @@
 package net.peeknpoke.apps.computeshaderexample.opengl;
 
 import android.content.Context;
-import android.opengl.GLES30;
+import android.opengl.GLES31;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -31,18 +31,18 @@ class ShaderUtil {
   static final boolean DEBUG = true;
 
   static int loadGLShader(String tag, String shaderCode, int type) {
-    int shader = GLES30.glCreateShader(type);
-    GLES30.glShaderSource(shader, shaderCode);
-    GLES30.glCompileShader(shader);
+    int shader = GLES31.glCreateShader(type);
+    GLES31.glShaderSource(shader, shaderCode);
+    GLES31.glCompileShader(shader);
 
     // Get the compilation status.
     final int[] compileStatus = new int[1];
-    GLES30.glGetShaderiv(shader, GLES30.GL_COMPILE_STATUS, compileStatus, 0);
+    GLES31.glGetShaderiv(shader, GLES31.GL_COMPILE_STATUS, compileStatus, 0);
 
     // If the compilation failed, delete the shader.
     if (compileStatus[0] == 0) {
-      Log.e(tag, "Error compiling shader: " + GLES30.glGetShaderInfoLog(shader));
-      GLES30.glDeleteShader(shader);
+      Log.e(tag, "Error compiling shader: " + GLES31.glGetShaderInfoLog(shader));
+      GLES31.glDeleteShader(shader);
       shader = 0;
     }
 
@@ -63,14 +63,14 @@ class ShaderUtil {
     if (!DEBUG)
       return;
 
-    int lastError = GLES30.GL_NO_ERROR;
+    int lastError = GLES31.GL_NO_ERROR;
     // Drain the queue of all errors.
     int error;
-    while ((error = GLES30.glGetError()) != GLES30.GL_NO_ERROR) {
+    while ((error = GLES31.glGetError()) != GLES31.GL_NO_ERROR) {
       Log.e(tag, label + ": glError " + error);
       lastError = error;
     }
-    if (lastError != GLES30.GL_NO_ERROR) {
+    if (lastError != GLES31.GL_NO_ERROR) {
       throw new RuntimeException(label + ": glError " + lastError);
     }
   }
