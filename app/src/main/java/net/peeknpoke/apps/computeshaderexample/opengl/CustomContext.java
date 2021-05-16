@@ -20,6 +20,7 @@ public class CustomContext {
     //private static final String TAG = CustomContext.class.getSimpleName();
 
     private Renderer mRenderer;
+    private ComputeShader mComputeShader;
 
     private final EGLContext mCtx;
     private final EGLDisplay mDpy;
@@ -82,15 +83,19 @@ public class CustomContext {
         mBB.order(ByteOrder.nativeOrder());
         mBitmap = Bitmap.createBitmap(imageSize.getWidth(), imageSize.getHeight(), Bitmap.Config.ARGB_8888);
         mRenderer = new Renderer(context);
+        mComputeShader = new ComputeShader(context, mBitmap.getWidth(), mBitmap.getHeight());
     }
 
     public void onDrawFrame()
     {
         GLES31.glClear(GLES31.GL_COLOR_BUFFER_BIT | GLES31.GL_DEPTH_BUFFER_BIT);
-        if (mRenderer !=null)
+        if (mRenderer !=null && mComputeShader!=null)
         {
-            mRenderer.onDrawFrame(mTextureHandler.getTexture(), mBitmap.getWidth(),
-                    mBitmap.getHeight());
+            mComputeShader.execute(mTextureHandler.getTexture());
+            //mRenderer.onDrawFrame(mTextureHandler.getTexture(), mBitmap.getWidth(),
+              //      mBitmap.getHeight());
+
+            mComputeShader.logHistogram();
         }
     }
 

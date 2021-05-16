@@ -1,0 +1,22 @@
+#version 310 es
+
+// NUM_X * NUM_Y * NUM_Z threads per work group.
+layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
+
+layout(std430) buffer; // Sets the default layout for SSBOs.
+layout(binding = 0) buffer SSBO {
+    int histogram[]; // This array can now be tightly packed.
+};
+
+layout(r32f, binding = 1) readonly uniform highp image2D uImage;
+
+void main()
+{
+    ivec2 texelCoords = ivec2(gl_GlobalInvocationID.xy);
+
+    vec4 color = imageLoad(uImage, texelCoords);
+    int gray = int(255.0*(color.r+color.g+color.b)/3.0);
+    gray = clamp(gray, 0, 255);
+    if (gl_WorkGroupID.x==1u && gl_WorkGroupID.y==1u)
+        atomicAdd(histogram[250], 1);
+}

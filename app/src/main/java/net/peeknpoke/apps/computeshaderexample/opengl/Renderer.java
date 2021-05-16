@@ -25,8 +25,8 @@ public class Renderer {
     int quadPositionParam;
     int quadTexCoordParam;
 
-    String mVertexShader;
-    String mFragmentShader;
+    String mVertexShaderCode;
+    String mFragmentShaderCode;
 
     int muTexMatrixLoc;
 
@@ -69,8 +69,8 @@ public class Renderer {
 
         try
         {
-            mVertexShader = ShaderUtil.readRawTextFileFromAssets(context, vertexShaderFile);
-            mFragmentShader = ShaderUtil.readRawTextFileFromAssets(context, fragmentShaderFile);
+            mVertexShaderCode = ShaderUtil.readRawTextFileFromAssets(context, vertexShaderFile);
+            mFragmentShaderCode = ShaderUtil.readRawTextFileFromAssets(context, fragmentShaderFile);
         }
         catch (IOException e)
         {
@@ -162,9 +162,9 @@ public class Renderer {
     private void createProgram()
     {
         int vertexShader =
-                ShaderUtil.loadGLShader(TAG, mVertexShader, GLES31.GL_VERTEX_SHADER);
+                ShaderUtil.loadGLShader(TAG, mVertexShaderCode, GLES31.GL_VERTEX_SHADER);
         int fragmentShader =
-                ShaderUtil.loadGLShader(TAG, mFragmentShader, GLES31.GL_FRAGMENT_SHADER);
+                ShaderUtil.loadGLShader(TAG, mFragmentShaderCode, GLES31.GL_FRAGMENT_SHADER);
 
         mProgram = GLES31.glCreateProgram();
         GLES31.glAttachShader(mProgram, vertexShader);

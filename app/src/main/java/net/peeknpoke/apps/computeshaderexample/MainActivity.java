@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mSelectedImage = findViewById(R.id.imageView);
-        mRenderingThread = new HandlerThread("RenderingCaptureing");
+        mRenderingThread = new HandlerThread("RenderingCapturing");
         mRenderingThread.start();
         mRenderingHandler = new Handler(mRenderingThread.getLooper());
     }
