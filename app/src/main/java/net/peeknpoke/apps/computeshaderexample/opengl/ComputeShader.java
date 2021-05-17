@@ -101,6 +101,23 @@ public class ComputeShader {
         }
     }
 
+    void logInfo()
+    {
+        int[] threadsPerGroup = new int[1];
+        int[] maxWorkGroupsDispatched = new int[3];
+        int[] maxWorkGroupsCompiled = new int[3];
+        GLES31.glGetIntegerv(GLES31.GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, threadsPerGroup, 0);
+        GLES31.glGetIntegeri_v(GLES31.GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, maxWorkGroupsDispatched, 0);
+        GLES31.glGetIntegeri_v(GLES31.GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, maxWorkGroupsDispatched, 1);
+        GLES31.glGetIntegeri_v(GLES31.GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, maxWorkGroupsDispatched, 2);
+        GLES31.glGetIntegeri_v(GLES31.GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, maxWorkGroupsCompiled, 0);
+        GLES31.glGetIntegeri_v(GLES31.GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, maxWorkGroupsCompiled, 1);
+        GLES31.glGetIntegeri_v(GLES31.GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, maxWorkGroupsCompiled, 2);
+        Log.i(TAG, "Max threads per group (product of all dimensions): "+threadsPerGroup[0]);
+        Log.i(TAG, "Max workgroups allowed: "+maxWorkGroupsDispatched[0]+"x"+maxWorkGroupsDispatched[1]+"x"+maxWorkGroupsDispatched[2]);
+        Log.i(TAG, "Max workgroup size per dimension: "+maxWorkGroupsCompiled[0]+"x"+maxWorkGroupsCompiled[1]+"x"+maxWorkGroupsCompiled[2]);
+    }
+
     void resetHistogram()
     {
         mHistogram.rewind();

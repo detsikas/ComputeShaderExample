@@ -95,7 +95,8 @@ public class CustomContext {
             //mRenderer.onDrawFrame(mTextureHandler.getTexture(), mBitmap.getWidth(),
               //      mBitmap.getHeight());
 
-            mComputeShader.logHistogram();
+            //mComputeShader.logHistogram();
+            mComputeShader.logInfo();
         }
     }
 
