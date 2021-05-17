@@ -23,8 +23,8 @@ public class ComputeShader {
 
     public ComputeShader(Context context, int width, int height)
     {
-        WORK_GROUPS_X = width/16;
-        WORK_GROUPS_Y = height/8;
+        WORK_GROUPS_X = (int)Math.ceil(width/16.0);
+        WORK_GROUPS_Y = (int)Math.ceil(height/8.0);
         createSSBO();
         parseShaders(context);
         createProgram();
