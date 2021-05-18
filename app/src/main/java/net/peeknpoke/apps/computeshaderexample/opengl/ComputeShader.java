@@ -76,8 +76,9 @@ public class ComputeShader {
         GLES31.glBindImageTexture(1, texture, 0, false, 0, GLES31.GL_READ_ONLY, GLES31.GL_R32F);
         GLES31.glUseProgram(mProgram); // Compute shader program.
         GLES31.glDispatchCompute(WORK_GROUPS_X, WORK_GROUPS_Y, WORK_GROUPS_Z);
-        GLES31.glMemoryBarrier(GLES31.GL_ALL_BARRIER_BITS);
-        GLES31.glUseProgram(0);
+        //GLES31.glMemoryBarrier(GLES31.GL_SHADER_STORAGE_BARRIER_BIT);
+        GLES31.glFinish();
+        //GLES31.glUseProgram(0);
     }
 
     IntBuffer getHistogram()

@@ -17,6 +17,5 @@ void main()
     vec4 color = imageLoad(uImage, texelCoords);
     int gray = int(255.0*(color.r+color.g+color.b)/3.0);
     gray = clamp(gray, 0, 255);
-    if (gl_WorkGroupID.x==1u && gl_WorkGroupID.y==1u)
-        atomicAdd(histogram[250], 1);
+    atomicAdd(histogram[0], 1);
 }
