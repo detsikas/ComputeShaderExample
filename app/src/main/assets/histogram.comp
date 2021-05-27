@@ -8,14 +8,17 @@ layout(binding = 0) buffer SSBO {
     int histogram[]; // This array can now be tightly packed.
 };
 
-layout(r32f, binding = 1) readonly uniform highp image2D uImage;
+uniform sampler2D sTexture;
 
 void main()
 {
     ivec2 texelCoords = ivec2(gl_GlobalInvocationID.xy);
-
-    vec4 color = imageLoad(uImage, texelCoords);
-    int gray = int(255.0*(color.r+color.g+color.b)/3.0);
-    gray = clamp(gray, 0, 255);
-    atomicAdd(histogram[0], 1);
+    ivec2 rt = textureSize(sTexture, 0);
+    if (texelCoords.x<rt.x && texelCoords.y<rt.y)
+    {
+        vec4 color = texelFetch( sTexture, texelCoords, 0);
+        int gray = int(255.0*(0.299*color.r+0.587*color.g+0.114*color.b));
+        gray = clamp(gray, 0, 255);
+        atomicAdd(histogram[gray], 1);
+    }
 }

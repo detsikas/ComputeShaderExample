@@ -1,6 +1,7 @@
 package net.peeknpoke.apps.computeshaderexample.opengl;
 
 import android.content.Context;
+import android.opengl.GLES30;
 import android.opengl.GLES31;
 import android.util.Log;
 
@@ -73,7 +74,14 @@ public class ComputeShader {
     {
         GLES31.glBindBufferBase(GLES31.GL_SHADER_STORAGE_BUFFER, 0, mSSBO);
 
-        GLES31.glBindImageTexture(1, texture, 0, false, 0, GLES31.GL_READ_ONLY, GLES31.GL_R32F);
+        int textureUniformHandle = GLES30.glGetUniformLocation(mProgram, "sTexture");
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
+
+        // Bind the texture to this unit.
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, texture);
+
+        // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
+        GLES30.glUniform1i(textureUniformHandle, 1);
         GLES31.glUseProgram(mProgram); // Compute shader program.
         GLES31.glDispatchCompute(WORK_GROUPS_X, WORK_GROUPS_Y, WORK_GROUPS_Z);
         //GLES31.glMemoryBarrier(GLES31.GL_SHADER_STORAGE_BARRIER_BIT);
@@ -88,6 +96,7 @@ public class ComputeShader {
 
     void logHistogram()
     {
+        int totalCount = 0;
         ByteOrder order = mHistogram.order();
         mHistogram.rewind();
         while(mHistogram.hasRemaining())
@@ -98,8 +107,10 @@ public class ComputeShader {
             {
                 value = Integer.reverseBytes(value);
             }
+            totalCount+=value;
             Log.d(TAG, ""+pos+": "+value);
         }
+        Log.d(TAG, "count: "+totalCount);
     }
 
     void logInfo()
