@@ -1,0 +1,24 @@
+#version 310 es
+
+// NUM_X * NUM_Y * NUM_Z threads per work group.
+layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
+
+layout(std430) buffer; // Sets the default layout for SSBOs.
+layout(binding = 0) buffer SSBO {
+    int histogram[]; // This array can now be tightly packed.
+};
+
+uniform sampler2D sTexture;
+
+void main()
+{
+    ivec2 texelCoords = ivec2(gl_GlobalInvocationID.xy);
+    ivec2 rt = textureSize(sTexture, 0);
+    if (texelCoords.x<rt.x && texelCoords.y<rt.y)
+    {
+        vec4 color = texelFetch( sTexture, texelCoords, 0);
+        int gray = int(255.0*(0.299*color.r+0.587*color.g+0.114*color.b));
+        gray = clamp(gray, 0, 255);
+        atomicAdd(histogram[gray], 1);
+    }
+}
