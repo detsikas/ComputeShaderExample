@@ -104,7 +104,7 @@ public class Renderer {
         GLES31.glDeleteProgram(mProgram);
     }
 
-    void onDrawFrame(int texture, int viewPortWidth, int viewPortHeight)
+    void onDrawFrame(int texture, int viewPortWidth, int viewPortHeight, float[] histogram)
     {
         GLES31.glViewport(0, 0, viewPortWidth, viewPortHeight);
         // No need to test or write depth, the screen quad has arbitrary depth, and is expected
@@ -120,6 +120,11 @@ public class Renderer {
         // Copy the texture transformation matrix over.
         GLES31.glUniformMatrix4fv(muTexMatrixLoc, 1, false, IDENTITY_MATRIX, 0);
         ShaderUtil.checkGLError(TAG, "glUniformMatrix4fv");
+
+        // Copy the histogram matrix.
+        int loc = GLES31.glGetUniformLocation(mProgram, "histogram");
+        GLES31.glUniform1fv(loc, 256, histogram, 0);
+        ShaderUtil.checkGLError(TAG, "glUniform1iv");
 
         // Set the vertex positions.
         GLES31.glVertexAttribPointer(

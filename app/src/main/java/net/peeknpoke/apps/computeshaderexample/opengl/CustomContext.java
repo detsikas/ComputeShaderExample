@@ -93,7 +93,9 @@ public class CustomContext {
         if (mRenderer !=null && mComputeShader!=null)
         {
             mComputeShader.execute(mTextureHandler.getTexture());
-            mRenderer.onDrawFrame(mTextureHandler.getTexture(), mBitmap.getWidth(), mBitmap.getHeight());
+            mRenderer.onDrawFrame(mTextureHandler.getTexture(),
+                    mBitmap.getWidth(), mBitmap.getHeight(),
+                    mComputeShader.histogramEqualization(mBitmap.getWidth()*mBitmap.getHeight()));
             mComputeShader.logHistogram();
         }
     }

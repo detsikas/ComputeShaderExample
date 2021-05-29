@@ -114,6 +114,33 @@ public class ComputeShader {
         Log.d(TAG, "count: "+totalCount);
     }
 
+    // Calculate the new color map
+    float[] histogramEqualization(int imageSize)
+    {
+        float[] array = new float[256];
+        ByteOrder order = mHistogram.order();
+        mHistogram.rewind();
+        float sum = 0;
+        while(mHistogram.hasRemaining())
+        {
+            int pos = mHistogram.position();
+            int value = mHistogram.get();
+            if (order==ByteOrder.BIG_ENDIAN)
+            {
+                value = Integer.reverseBytes(value);
+            }
+            sum+=value;
+            array[pos]=sum;
+        }
+
+        for (int i=0; i<256; i++)
+        {
+            array[i]/=imageSize;
+        }
+
+        return array;
+    }
+
     void logInfo()
     {
         int[] threadsPerGroup = new int[1];
