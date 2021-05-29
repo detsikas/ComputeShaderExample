@@ -88,15 +88,13 @@ public class CustomContext {
 
     public void onDrawFrame()
     {
+        mComputeShader.logInfo();
         GLES31.glClear(GLES31.GL_COLOR_BUFFER_BIT | GLES31.GL_DEPTH_BUFFER_BIT);
         if (mRenderer !=null && mComputeShader!=null)
         {
             mComputeShader.execute(mTextureHandler.getTexture());
-            //mRenderer.onDrawFrame(mTextureHandler.getTexture(), mBitmap.getWidth(),
-              //      mBitmap.getHeight());
-
+            mRenderer.onDrawFrame(mTextureHandler.getTexture(), mBitmap.getWidth(), mBitmap.getHeight());
             mComputeShader.logHistogram();
-            mComputeShader.logInfo();
         }
     }
 

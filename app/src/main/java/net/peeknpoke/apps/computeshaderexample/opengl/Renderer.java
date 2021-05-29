@@ -114,7 +114,7 @@ public class Renderer {
 
         GLES31.glUseProgram(mProgram);
 
-        GLES31.glActiveTexture(GLES31.GL_TEXTURE0);
+        GLES31.glActiveTexture(GLES31.GL_TEXTURE1);
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, texture);
 
         // Copy the texture transformation matrix over.
