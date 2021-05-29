@@ -7,4 +7,4 @@ The applications lets the user pick an image from their gallery, calculates the 
 
 For demonstration purposes, the left half of the BW image is left untouched, while the right one is equalized.
 
-For an image of dimensions ~4000x2000 it takes about 30ms to compute an a Samsung Galaxy S8, while for a ~2000x1000 image 14ms.
+For an image of dimensions ~4000x2000 it takes about 30ms to compute on a Samsung Galaxy S8, while for a ~2000x1000 image 14ms.
